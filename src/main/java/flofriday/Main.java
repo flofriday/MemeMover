@@ -32,7 +32,6 @@ public class Main extends JFrame {
     originalImage = icon.getImage();
     label = new JLabel(icon);
     label.setLayout(null);
-    //label.setBounds(0, 0, getMaxImgSize(), getMaxImgSize());
     add(label);
 
     var mouseListener = new CustomMouseListener();
@@ -40,10 +39,15 @@ public class Main extends JFrame {
     addMouseMotionListener(mouseListener);
   }
 
+  // The size the images reaches when it stops growing.
+  // Scales to the proportions of the window.
   private int getMaxImgSize() {
     return Math.min(getSize().width, getSize().height) / 2;
   }
 
+  // The progress of the transformation.
+  // Returns somewhere between 0 and 1.
+  // 0 meaning the mouse is literally at the edge and 1 at the center of the window.
   private double getProgress(int x, int y) {
     var width = getSize().width;
     var height = getSize().height;
@@ -71,8 +75,12 @@ public class Main extends JFrame {
   }
 
   private void moveScaleImage(int x, int y) {
-    int scaledSize = (int) (getMaxImgSize() * (0.25 + 0.75 * getProgress(x, y)));
+    // Note: I wasn't sure if "quarter of original size" meant the area or the edge of the meme.
+    // However, a quarter of the edge looked better, so I went with that.
+    double initialScale = 0.25;
+    int scaledSize = (int) (getMaxImgSize() * (initialScale + (1 - initialScale) * getProgress(x, y)));
     int size = Math.min(getMaxImgSize(), scaledSize);
+
     icon.setImage(originalImage.getScaledInstance(size, size, Image.SCALE_SMOOTH));
     label.setBounds(x - size / 2, y - size / 2, size, size);
   }
