@@ -1,21 +1,17 @@
 package flofriday;
 
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 import java.util.Objects;
-import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 public class Main extends JFrame {
   private Edge enteredFrom = null;
-  private final JLabel label;
-  private final ImageIcon icon;
-  private final Image originalImage;
+  private JComponent target;
 
   enum Edge {
     LEFT, RIGHT, TOP, BOTTOM
@@ -28,11 +24,9 @@ public class Main extends JFrame {
     setSize(800, 800);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-    icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/serverdown.jpg")));
-    originalImage = icon.getImage();
-    label = new JLabel(icon);
-    label.setLayout(null);
-    add(label);
+    target = new MemeLabel(Objects.requireNonNull(getClass().getResource("/serverdown.jpg")));
+    add(target);
+
 
     var mouseListener = new CustomMouseListener();
     addMouseListener(mouseListener);
@@ -81,11 +75,22 @@ public class Main extends JFrame {
     int scaledSize = (int) (getMaxImgSize() * (initialScale + (1 - initialScale) * getProgress(x, y)));
     int size = Math.min(getMaxImgSize(), scaledSize);
 
-    icon.setImage(originalImage.getScaledInstance(size, size, Image.SCALE_SMOOTH));
-    label.setBounds(x - size / 2, y - size / 2, size, size);
+    target.setBounds(x - size / 2, y - size / 2, size, size);
   }
 
   class CustomMouseListener extends MouseAdapter {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+      remove(target);
+      if (target instanceof MemeLabel) {
+        target = new SlowComplexPanel();
+      } else {
+        target = new MemeLabel(Objects.requireNonNull(getClass().getResource("/serverdown.jpg")));
+      }
+      add(target);
+      moveScaleImage(e.getX(), e.getY());
+    }
+
     @Override
     public void mouseMoved(MouseEvent e) {
       moveScaleImage(e.getX(), e.getY());
@@ -93,14 +98,14 @@ public class Main extends JFrame {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-      label.setVisible(true);
+      target.setVisible(true);
       enteredFrom = getClosestEdge(e.getX(), e.getY());
       moveScaleImage(e.getX(), e.getY());
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-      label.setVisible(false);
+      target.setVisible(false);
     }
   }
 
