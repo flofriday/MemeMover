@@ -25,6 +25,8 @@ public class Main extends JFrame {
 
   public Main() {
     super("MemeMover");
+
+    setLayout(null);
     setSize(windowSize, windowSize);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -32,8 +34,8 @@ public class Main extends JFrame {
     originalImage = icon.getImage();
     icon.setImage(originalImage.getScaledInstance(imgSize, imgSize, Image.SCALE_FAST));
     label = new JLabel(icon);
-    label.setVisible(false);
-    label.setSize(0, 0);
+    label.setLayout(null);
+    label.setBounds(0, 0, imgSize, imgSize);
     add(label);
 
     var mouseListener = new CustomMouseListener();
@@ -65,10 +67,9 @@ public class Main extends JFrame {
   }
 
   private void moveScaleImage(int x, int y) {
-    label.setLocation(x - windowSize/2, y - windowSize/2);
-
     var size = (int)Math.min(imgSize, imgSize * 0.25 + getProgress(x, y) * 0.5);
-    icon.setImage(originalImage.getScaledInstance(size, size, Image.SCALE_FAST));
+    icon.setImage(originalImage.getScaledInstance(size, size, Image.SCALE_SMOOTH));
+    label.setBounds(x - size/2, y-size/2, size,size);
   }
 
   class CustomMouseListener extends MouseAdapter {
@@ -82,7 +83,7 @@ public class Main extends JFrame {
       var x = e.getX();
       var y = e.getY();
       enteredFrom = getClosestEdge(e.getX(), e.getY());
-      System.out.println("%d %d".formatted(e.getX(), e.getY()));
+
       label.setVisible(true);
       moveScaleImage(x, y);
     }
