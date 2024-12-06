@@ -12,8 +12,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 public class Main extends JFrame {
-  final private int windowSize = 800;
-  final private int imgSize = 400;
   private Edge enteredFrom = null;
   private final JLabel label;
   private final ImageIcon icon;
@@ -27,15 +25,14 @@ public class Main extends JFrame {
     super("MemeMover");
 
     setLayout(null);
-    setSize(windowSize, windowSize);
+    setSize(800, 800);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/serverdown.jpg")));
     originalImage = icon.getImage();
-    icon.setImage(originalImage.getScaledInstance(imgSize, imgSize, Image.SCALE_FAST));
     label = new JLabel(icon);
     label.setLayout(null);
-    label.setBounds(0, 0, imgSize, imgSize);
+    //label.setBounds(0, 0, getMaxImgSize(), getMaxImgSize());
     add(label);
 
     var mouseListener = new CustomMouseListener();
@@ -43,12 +40,19 @@ public class Main extends JFrame {
     addMouseMotionListener(mouseListener);
   }
 
-  private int getProgress(int x, int y) {
+  private int getMaxImgSize() {
+    return Math.min(getSize().width, getSize().height) / 2;
+  }
+
+  private double getProgress(int x, int y) {
+    var width = getSize().width;
+    var height = getSize().height;
+
     return switch (enteredFrom) {
-      case LEFT -> x;
-      case TOP -> y;
-      case RIGHT -> windowSize - x;
-      case BOTTOM -> windowSize - y;
+      case LEFT -> Math.min(1.0, x / ((double) width / 2));
+      case TOP -> Math.min(1.0, y / ((double) height / 2));
+      case RIGHT -> Math.min(1.0, (width - x) / ((double) width / 2));
+      case BOTTOM -> Math.min(1.0, (height - y) / ((double) height / 2));
     };
   }
 
@@ -56,8 +60,8 @@ public class Main extends JFrame {
     Map<Edge, Integer> distances = Map.of(
         Edge.LEFT, x,
         Edge.TOP, y,
-        Edge.RIGHT, windowSize - x,
-        Edge.BOTTOM, windowSize - y
+        Edge.RIGHT, getSize().width - x,
+        Edge.BOTTOM, getSize().height - y
     );
 
     return distances.entrySet().stream()
@@ -67,9 +71,10 @@ public class Main extends JFrame {
   }
 
   private void moveScaleImage(int x, int y) {
-    var size = (int)Math.min(imgSize, imgSize * 0.25 + getProgress(x, y) * 0.5);
+    int scaledSize = (int) (getMaxImgSize() * (0.25 + 0.75 * getProgress(x, y)));
+    int size = Math.min(getMaxImgSize(), scaledSize);
     icon.setImage(originalImage.getScaledInstance(size, size, Image.SCALE_SMOOTH));
-    label.setBounds(x - size/2, y-size/2, size,size);
+    label.setBounds(x - size / 2, y - size / 2, size, size);
   }
 
   class CustomMouseListener extends MouseAdapter {
@@ -80,12 +85,9 @@ public class Main extends JFrame {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-      var x = e.getX();
-      var y = e.getY();
-      enteredFrom = getClosestEdge(e.getX(), e.getY());
-
       label.setVisible(true);
-      moveScaleImage(x, y);
+      enteredFrom = getClosestEdge(e.getX(), e.getY());
+      moveScaleImage(e.getX(), e.getY());
     }
 
     @Override
