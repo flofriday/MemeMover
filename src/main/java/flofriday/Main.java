@@ -9,6 +9,7 @@ import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -39,8 +40,11 @@ public class Main extends JFrame {
 
 
     var mouseListener = new CustomMouseListener();
-    addMouseListener(mouseListener);
-    addMouseMotionListener(mouseListener);
+    var glassPane = (JPanel) getRootPane().getGlassPane();
+    glassPane.setOpaque(false);
+    glassPane.setVisible(true);
+    this.getRootPane().getGlassPane().addMouseListener(mouseListener);
+    this.getRootPane().getGlassPane().addMouseMotionListener(mouseListener);
 
     addComponentListener(new ComponentAdapter() {
       @Override
@@ -93,8 +97,6 @@ public class Main extends JFrame {
     int size = Math.min(getMaxImgSize(), scaledSize);
 
     target.setBounds(x - size / 2, y - size / 2, size, size);
-
-
   }
 
   class CustomMouseListener extends MouseAdapter {
