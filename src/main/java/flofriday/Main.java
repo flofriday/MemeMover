@@ -93,6 +93,8 @@ public class Main extends JFrame {
     int size = Math.min(getMaxImgSize(), scaledSize);
 
     target.setBounds(x - size / 2, y - size / 2, size, size);
+
+
   }
 
   class CustomMouseListener extends MouseAdapter {
@@ -106,11 +108,13 @@ public class Main extends JFrame {
       }
       add(target);
       moveScaleTarget(e.getX(), e.getY());
+      revalidate();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
       moveScaleTarget(e.getX(), e.getY());
+      revalidate();
     }
 
     @Override
@@ -119,12 +123,14 @@ public class Main extends JFrame {
       target.setVisible(true);
       enteredFrom = getClosestEdge(e.getX(), e.getY());
       moveScaleTarget(e.getX(), e.getY());
+      revalidate();
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
       target.setVisible(false);
       hintLabel.setVisible(true);
+      revalidate();
     }
   }
 
