@@ -1,2 +1,8 @@
-rootProject.name = "MemeMover"
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 
+rootProject.name = "MemeMoverPlugin"

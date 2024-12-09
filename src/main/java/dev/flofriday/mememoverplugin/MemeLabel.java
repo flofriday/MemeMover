@@ -1,4 +1,4 @@
-package flofriday;
+package dev.flofriday.mememoverplugin;
 
 import java.awt.Image;
 import java.net.URL;

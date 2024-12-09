@@ -1,10 +1,10 @@
-package flofriday;
+package dev.flofriday.mememoverplugin;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,11 +21,10 @@ public class SlowComplexPanel extends JPanel {
 
   public SlowComplexPanel() {
     setLayout(new GridBagLayout());
-    setBackground(Color.WHITE);
+    setBorder(BorderFactory.createEtchedBorder());
 
     // Setup the loading content
     loadingPanel = new JPanel();
-    loadingPanel.setBackground(Color.WHITE);
     loadingPanel.setLayout(new BoxLayout(loadingPanel, BoxLayout.Y_AXIS));
 
     var label = new JLabel("Loading...");

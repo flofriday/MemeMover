@@ -1,4 +1,4 @@
-package flofriday;
+package dev.flofriday.mememoverplugin;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -14,7 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-public class Main extends JFrame {
+public class MemeMover extends JFrame {
   private Edge enteredFrom = null;
   private JComponent target;
   private final JLabel hintLabel;
@@ -23,12 +23,12 @@ public class Main extends JFrame {
     LEFT, RIGHT, TOP, BOTTOM
   }
 
-  public Main() {
+  public MemeMover() {
     super("MemeMover");
 
     setLayout(null);
     setSize(800, 800);
-    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
     hintLabel = new JLabel("Move the mouse over the window. Click to toggle content.", SwingConstants.CENTER);
@@ -137,6 +137,10 @@ public class Main extends JFrame {
   }
 
   public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> new Main().setVisible(true));
+    SwingUtilities.invokeLater(() -> {
+        var window = new MemeMover();
+            window.setVisible(true);
+            window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    });
   }
 }
