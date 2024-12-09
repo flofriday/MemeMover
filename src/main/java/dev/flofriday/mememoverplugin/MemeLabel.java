@@ -9,7 +9,7 @@ import javax.swing.JLabel;
  * Just a simple label that displays a meme.
  * Automatically resizes the meme according to the size.
  */
-public class MemeLabel  extends JLabel {
+public class MemeLabel extends JLabel {
   private final ImageIcon icon;
   private final Image originalImage;
 
