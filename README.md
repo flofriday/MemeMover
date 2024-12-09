@@ -2,6 +2,11 @@
 
 A simple intelliJ plugin, to move a meme inside a swing window.
 
+
+https://github.com/user-attachments/assets/3abf327e-4501-47c3-b097-6916268c6f21
+
+
+
 ## Features
 
 Enter the frame from any edge and the meme will appear a quarter of its size and increase to its full size as you move the cursor to the middle of the window. Only the axis of the edge you entered accounts for the meme's size (e.g., if you enter from the left only horizontal movement will adjust the size, vertical movement is ignored.)
